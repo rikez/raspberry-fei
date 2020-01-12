@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  rpi-notifier:
+    image: enrich/rpi-notifier  
+    env_file:
+      - notifier.env
+    networks:
+      - app
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+  rpi-router:
+    image: enrich/rpi-router
+    ports:
+      - "8082:8082"
+    env_file:
+      - router.env
+    networks:
+      - app
+    deploy:
+      replicas: 3
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+  rpi-user-manager:
+    image: enrich/rpi-user-manager
+    ports:
+      - "80:8080"
+    env_file:
+      - user.env
+    networks:
+      - app
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+  monitor-manager:
+    image: enrich/monitor-manager
+    env_file:
+      - monitor.env
+    networks:
+      - app
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+      placement:
+        constraints: [node.role == manager]
+
+networks:
+  app:
+    driver: overlay
