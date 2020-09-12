@@ -11,6 +11,6 @@
   "dependencies": {
     "dotenv": "^8.0.0",
     "node-dht-sensor": "^0.3.0",
-    "node-fetch": "^2.6.0"
+    "node-fetch": "^2.6.1"
   }
 }
